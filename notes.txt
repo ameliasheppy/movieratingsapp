@@ -1,0 +1,97 @@
+>>> mov = Movie(title='Test', overview='This is a test',
+... release_date=datetime.now(),poster_path='blah')
+>>> db.session.add(mov)
+>>> db.session.commit()
+2023-03-27 09:42:02,391 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2023-03-27 09:42:02,392 INFO sqlalchemy.engine.Engine INSERT INTO movies (title, overview, release_date, poster_path) VALUES (%(title)s, %(overview)s, %(release_dat
+e)s, %(poster_path)s) RETURNING movies.movie_id
+2023-03-27 09:42:02,392 INFO sqlalchemy.engine.Engine [generated in 0.00016s] {'title': 'Test', 'overview': 'This is a test', 'release_date': datetime.datetime(2023
+, 3, 27, 9, 41, 34, 677670), 'poster_path': 'blah'}
+2023-03-27 09:42:02,403 INFO sqlalchemy.engine.Engine COMMIT
+>>> movies = Movie.query.all()
+2023-03-27 09:45:20,589 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2023-03-27 09:45:20,591 INFO sqlalchemy.engine.Engine SELECT movies.movie_id AS movies_movie_id, movies.title AS movies_title, movies.overview AS movies_overview, m
+ovies.release_date AS movies_release_date, movies.poster_path AS movies_poster_path
+FROM movies
+2023-03-27 09:45:20,591 INFO sqlalchemy.engine.Engine [generated in 0.00017s] {}
+>>> movies = Movie.query.all()
+2023-03-27 09:56:29,999 INFO sqlalchemy.engine.Engine SELECT movies.movie_id AS movies_movie_id, movies.title AS movies_title, movies.overview AS movies_overview, m
+ovies.release_date AS movies_release_date, movies.poster_path AS movies_poster_path
+FROM movies
+2023-03-27 09:56:29,999 INFO sqlalchemy.engine.Engine [cached since 669.4s ago] {}
+>>> movies = Movie.query.all()
+2023-03-27 09:56:49,844 INFO sqlalchemy.engine.Engine SELECT movies.movie_id AS movies_movie_id, movies.title AS movies_title, movies.overview AS movies_overview, m
+ovies.release_date AS movies_release_date, movies.poster_path AS movies_poster_path
+FROM movies
+2023-03-27 09:56:49,845 INFO sqlalchemy.engine.Engine [cached since 689.3s ago] {}
+>>> movie
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'movie' is not defined
+>>> movies
+[<Movie movie_id=1 title=Dogs Gone Wild>, <Movie movie_id=2 title=TestTwo>, <Movie movie_id=3 title=Test>]
+>>> clear
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'clear' is not defined
+>>> clear()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'clear' is not defined
+>>> Movie.query.filter_by(title = "Dogs gone wild")
+<flask_sqlalchemy.BaseQuery object at 0x7f7934e12fd0>
+>>> Movie.query.filter_by(title = "Dogs gone wild").one()
+2023-03-27 10:04:41,725 INFO sqlalchemy.engine.Engine SELECT movies.movie_id AS movies_movie_id, movies.title AS movies_title, movies.overview AS movies_overview, m
+ovies.release_date AS movies_release_date, movies.poster_path AS movies_poster_path
+FROM movies
+WHERE movies.title = %(title_1)s
+2023-03-27 10:04:41,726 INFO sqlalchemy.engine.Engine [generated in 0.00037s] {'title_1': 'Dogs gone wild'}
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/adminamy/src/ratings-v2/env/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2796, in one
+    return self._iter().one()
+  File "/home/adminamy/src/ratings-v2/env/lib/python3.8/site-packages/sqlalchemy/engine/result.py", line 1365, in one
+    return self._only_one_row(
+  File "/home/adminamy/src/ratings-v2/env/lib/python3.8/site-packages/sqlalchemy/engine/result.py", line 561, in _only_one_row
+    raise exc.NoResultFound(
+sqlalchemy.exc.NoResultFound: No row was found when one was required
+>>> Movie.query.filter_by(title = "Dogs Gone Wild").one()
+2023-03-27 10:05:11,532 INFO sqlalchemy.engine.Engine SELECT movies.movie_id AS movies_movie_id, movies.title AS movies_title, movies.overview AS movies_overview, m
+ovies.release_date AS movies_release_date, movies.poster_path AS movies_poster_path
+FROM movies
+WHERE movies.title = %(title_1)s
+2023-03-27 10:05:11,532 INFO sqlalchemy.engine.Engine [cached since 29.81s ago] {'title_1': 'Dogs Gone Wild'}
+<Movie movie_id=1 title=Dogs Gone Wild>
+>>> m= Movie.query.filter_by(title = "Dogs Gone Wild").one()
+2023-03-27 10:05:27,906 INFO sqlalchemy.engine.Engine SELECT movies.movie_id AS movies_movie_id, movies.title AS movies_title, movies.overview AS movies_overview, m
+ovies.release_date AS movies_release_date, movies.poster_path AS movies_poster_path
+FROM movies
+WHERE movies.title = %(title_1)s
+2023-03-27 10:05:27,906 INFO sqlalchemy.engine.Engine [cached since 46.18s ago] {'title_1': 'Dogs Gone Wild'}
+>>> m
+<Movie movie_id=1 title=Dogs Gone Wild>
+>>> m.ratings
+2023-03-27 10:05:44,222 INFO sqlalchemy.engine.Engine SELECT ratings.rating_id AS ratings_rating_id, ratings.score AS ratings_score, ratings.movie_id AS ratings_mov
+ie_id, ratings.user_id AS ratings_user_id
+FROM ratings
+WHERE %(param_1)s = ratings.movie_id
+2023-03-27 10:05:44,222 INFO sqlalchemy.engine.Engine [generated in 0.00016s] {'param_1': 1}
+[<Rating rating_id=1 score=5>]
+>>> movie.ratings
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'movie' is not defined
+>>> movie.ratings[0]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'movie' is not defined
+>>> m.ratings[0]
+<Rating rating_id=1 score=5>
+>>> m.ratings.movie_id
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'InstrumentedList' object has no attribute 'movie_id'
+>>> m.ratings[0].movie_id
+1
+>>> m.ratings[0].movie
+<Movie movie_id=1 title=Dogs Gone Wild>

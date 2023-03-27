@@ -60,7 +60,7 @@ class Rating(db.Model):
     score = db.Column(db.Integer)
     movie_id = db.Column(db.Integer, db.ForeignKey("movies.movie_id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-
+# weird instance attr that I'm looking for are below.
     movie = db.relationship("Movie", back_populates="ratings")
     user = db.relationship("User", back_populates="ratings")
 
