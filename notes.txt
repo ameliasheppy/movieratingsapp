@@ -95,3 +95,111 @@ AttributeError: 'InstrumentedList' object has no attribute 'movie_id'
 1
 >>> m.ratings[0].movie
 <Movie movie_id=1 title=Dogs Gone Wild>
+
+
+
+adminamy@wesley:~/src/data-modeling-demo$ source env/bin/activate
+(env) adminamy@wesley:~/src/data-modeling-demo$ python3 -i many_to_many.py
+NOTICE:  database "many-to-many" does not exist, skipping
+[<Comment id=1 body=I loved it...>, <Comment id=2 body=A lot bett...>, <Comment id=[<Comment id=1 body=I l[<Comment id=1 body=I loved it...>, <Comment id=2 body=A lot bett...>, <Comment id=3 body=I hated it...>]
+>>> babe = Book(title="Babe!")
+>>> babe
+<Book title=Babe!>
+>>> jane = User(email="jane@j")
+>>> fred = User(email="fred@f")
+>>> jane
+<User id=None email=jane@j>
+>>> fred
+<User id=None email=fred@f>
+>>> hamlet.id
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'Book' object has no attribute 'id'
+>>> hamlet.book_id
+1
+>>> babe.book_id
+>>> comment1 = Comment(book=babe, user=jane, body="5 stars")
+>>> comment1.book
+<Book title=Babe!>
+>>> comment1.user
+<User id=None email=jane@j>
+>>> db.session.add(comment1)
+>>> db.session.commit()
+>>> db.session.add(jane)
+>>> db.session.commit()
+>>> db.session.add(fred)
+>>> db.session.commit()
+>>> db.session.add(babe)
+>>> db.session.commit()
+>>> jane.comments.append(Comment(book=hamlet, body="What is up with this garbaj?"))
+>>> hemlet.comments.appedn(Comment(user=fred, body="What Jane said!"))
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'hemlet' is not defined
+>>> hamlet.comments.appedn(Comment(user=fred, body="What Jane said!"))
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'InstrumentedList' object has no attribute 'appedn'
+>>> hamlet.comments.append(Comment(user=fred, body="What Jane said!"))
+>>> jane.comments
+[<Comment id=4 body=5 stars...>, <Comment id=5 body=What is up...>]
+>>> fred.comments
+[<Comment id=6 body=What Jane ...>]
+>>> db.session.new
+IdentitySet([])
+>>> db.session.add(hamlet)
+>>> db.session.commit()
+>>> db.session.new
+IdentitySet([])
+>>> comments = Book.get_by_title("Hamlet").comments
+>>> print(comments)
+[<Comment id=1 body=I loved it...>, <Comment id=2 body=A lot bett...>, <Comment id=3 body=I hated it...>,
+<Comment id=5 body=What is up...>, <Comment id=6 body=What Jane ...>]
+>>> assert len(comments) == 2
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
+>>> assert len(comments) == 5
+>>> assert len(comments) == 8
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
+>>> dragons = Book(title="How to Train Your Dragon")
+>>> dragons
+<Book title=How to Train Your Dragon>
+>>> doggoss = Book(title="How to Train Your Dog!")
+>>> doggos
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'doggos' is not defined
+>>> doggoss
+<Book title=How to Train Your Dog!>
+>>> amelia = User("amy@amelia.com")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: __init__() takes 1 positional argument but 2 were given
+>>> amelia = User(email="amy@amelia.com")
+>>> amelia
+<User id=None email=amy@amelia.com>
+>>> amelia.comments.appen(book=dragons, body="Been a fav since 2010!")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'InstrumentedList' object has no attribute 'appen'
+>>> amelia.comments.append(book=dragons, body="Been a fav since 2010!")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: append() got an unexpected keyword argument 'book'
+>>> amelia.comments.append(Comment(book=dragons, body="Been a fav since 2010!"))
+>>> amelia.comments.append(Comment(book=doggoss, body="Helped me make my boxers into babies!"))
+>>> db.session.add(amelia)
+>>> db.session.add(dragons)
+>>> db.session.add(doggoss)
+>>> db.session.commit()
+
+>>> test=Book.query.filter_by(title="Hamlet")
+>>> test.all
+<bound method Query.all of <flask_sqlalchemy.BaseQuery object at 0x7f9788ffde20>>
+>>> test.one()
+<Book title=Hamlet>
+>>> test.all()
+[<Book title=Hamlet>]
