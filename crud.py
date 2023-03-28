@@ -47,6 +47,19 @@ def create_rating(user, movie, score):
     return rating
 
 
+def update_rating(rating_id, new_score):
+    """ Update a rating given rating_id and the updated score. """
+    rating = Rating.query.get(rating_id)
+    rating.score = new_score
+
+
+def get_user_by_email(email):
+    """If the user with that email exists, return that user, else return None"""
+
+    # return User.query.get(email) ----> Close! But I was wrong.
+    return User.query.filter(User.email == email).first()
+
+
 if __name__ == '__main__':
     from server import app
     connect_to_db(app)

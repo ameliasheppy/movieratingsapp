@@ -140,8 +140,8 @@ for n in range(10):
 
     user = crud.create_user(email, password)
     model.db.session.add(user)
-    check_user = model.User.query.first()
-    print(check_user)
+    # check_user = model.User.query.first()
+    # print(check_user)
     for _ in range(10):
         random_movie = choice(movies_in_db)
         score = randint(1, 5)
@@ -150,7 +150,3 @@ for n in range(10):
         model.db.session.add(rating)
 
 model.db.session.commit()
-
-# dudeperfect = Movie(title="Dude Perfect", overview="A bunch of dudes doing trick shots!", release_date="2022-12-24", poster_path="static/files/inyourcomp")
-# dudeperfect = db_movie(title="Dude Perfect", overview="A bunch of dudes doing trick shots!",
-#                        release_date="2022-12-24", poster_path="static/files/inyourcomp")

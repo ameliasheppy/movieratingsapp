@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
 
-<!-- {% block title %}Here is the user's password{% endblock %} -->
+{% block title %}Here is the {{ user.email}}'s page 🙌{% endblock %}
 
 {% block body %}
-<h1>{{ user.password }}</h1>
+<h1>{{ user.email }}</h1>
+<ul>
 
+{% for rating in user.ratings %}
+    <li>
+        {{rating.movie.title}}:
+<!-- Why isn't the class below in quotation marks? -->
+        <span class=rating_num_{{rating.rating_id}}>
+            {{rating.score}}
+        </span>
+    </li>
+{% endfor %}
+
+</ul>
 
 
 {% endblock %}
